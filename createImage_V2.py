@@ -4,7 +4,7 @@ from matplotlib import pyplot
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.models import Sequential, Model
 from tensorflow.keras.layers import Conv2DTranspose, Conv2D, Dropout, Dense, LeakyReLU, BatchNormalization, Reshape, Flatten, Input
-from keras.utils.vis_utils import plot_model
+#from keras.utils.vis_utils import plot_model
 from numpy import expand_dims
 from numpy import ones
 from numpy import zeros
@@ -135,7 +135,7 @@ def defineGenerator(latent_dim):
 # Generate points in latent space as input for the generator
 def generateLatentPoints(latent_dim, n_samples):
     # Generate points in the latent space
-    x_input = randn(latent_dim * n_samples)
+    x_input = rand(latent_dim * n_samples)
     #reshape into a batch of inputs for the network
     x_input = x_input.reshape(n_samples, latent_dim)
     return x_input
@@ -186,7 +186,7 @@ def train(g_model, d_model, gan_model, dataset, latent_dim, n_epochs=100, n_batc
             # Get real samples
             X_real, y_real = generateRealSamples(dataset, half_batch)
             # Generate fake samples
-            X_fake, y_fake = generateFakeSamples(g_modle, latent_dim, half_batch)
+            X_fake, y_fake = generateFakeSamples(g_model, latent_dim, half_batch)
             # Create training set for the discriminator
             X, y = vstack((X_real, X_fake)), vstack((y_real, y_fake))
             # Update discriminator model weights
@@ -209,13 +209,13 @@ def evaluatePerformance(epoch, g_model, d_model, dataset, latent_dim, n_samples=
     # Evaluate discriminator on real samples
     _, acc_real = d_model.evaluate(X_real, y_real, verbose=0)
     # Generate fake samples
-    X_fake, y_fake = generateFakeSamples(g_modle, latent_dim, n_samples)
+    X_fake, y_fake = generateFakeSamples(g_model, latent_dim, n_samples)
     # Evaluate discriminator on fake samples
     _, acc_fake = d_model.evaluate(X_fake, y_fake, verbose=0)
     # Print discriminator performance
     print('>Accuracy real: %.0f%%, fake: %.0f%%' % (acc_real*100, acc_fake*100))
     # Save plot
-    savePlot(x_fake, epoch)
+    savePlot(X_fake, epoch)
     # Save the generator model weights file
     filename = 'generator_model_%03d.h5' % (epoch + 1)
     g_model.save(filename)
@@ -228,9 +228,9 @@ def savePlot(x_fake, epoch, n=10):
         # Turn of axis
         pyplot.axis('off')
         # plot raw pixel data in reversed grayscale
-        pyplot.imshow(x_fake[i, :, :, 0] cmap='gray_r')
+        pyplot.imshow(x_fake[i, :, :, 0], cmap='gray_r')
         # save plot to file
-        filename = 'generated_plot_e%03d.png' % (epoch=1)
+        filename = 'generated_plot_e%03d.png' % (epoch+1)
         pyplot.savefig(filename)
         pyplot.close()
 
@@ -253,4 +253,3 @@ gan_model.summary()
 
 # plot gan model
 #plot_model(gan_model, to_file='gan_plot.png', show_shapes=True, show_layer_names=True)
-
