@@ -9,7 +9,7 @@ from numpy import expand_dims
 from numpy import ones
 from numpy import zeros
 from numpy import vstack
-from numpy.random import rand
+from numpy.random import randn
 from numpy.random import randint
 
 ##########################################################################################
@@ -135,7 +135,7 @@ def defineGenerator(latent_dim):
 # Generate points in latent space as input for the generator
 def generateLatentPoints(latent_dim, n_samples):
     # Generate points in the latent space
-    x_input = rand(latent_dim * n_samples)
+    x_input = randn(latent_dim * n_samples)
     #reshape into a batch of inputs for the network
     x_input = x_input.reshape(n_samples, latent_dim)
     return x_input
@@ -217,7 +217,7 @@ def evaluatePerformance(epoch, g_model, d_model, dataset, latent_dim, n_samples=
     # Save plot
     savePlot(X_fake, epoch)
     # Save the generator model weights file
-    filename = 'generator_model_%03d.h5' % (epoch + 1)
+    filename = 'generator_model_%03d.keras' % (epoch + 1)
     g_model.save(filename)
 
 # Create and save generated images (reversed grayscale)
