@@ -59,7 +59,7 @@ def defineDiscriminator(input_shape=(28,28,1)):
     model.add(Flatten())
     model.add(Dense(1, activation='sigmoid'))
     # compile model
-    optimizer = Adam(learning_rate=0.0002, beta_1=0.5) # TODO: Find out what beta_1 is. 
+    optimizer = Adam(learning_rate=0.0002, beta_1=0.5)
     model.compile(loss='binary_crossentropy', optimizer=optimizer, metrics=['accuracy'])
     return model
 
@@ -196,7 +196,7 @@ def train(g_model, d_model, gan_model, dataset, latent_dim, n_epochs=100, n_batc
             # create inverted labels for the fake samples
             y_gan = ones((n_batch, 1))
             # Update the generator via the discriminator's error
-
+            g_loss = gan_model.train_on_batch(X_gan, y_gan)
             # Summarize loss on this batch
             print('>%d, %d%d, d=%.3f, g=%.3f' % (i+1, j+1, batch_per_epoch, d_loss, g_loss))
         if (i+1) % 10 == 0:
