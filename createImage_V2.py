@@ -203,7 +203,7 @@ def train(g_model, d_model, gan_model, dataset, latent_dim, n_epochs=100, n_batc
             evaluatePerformance(i, g_model, d_model, dataset, latent_dim)
 
 # Evaluate the discriminator, Plot images, save generator model
-def evaluatePerformance(epoch, g_model, d_model, dataset, latent_dim, n_samples=100):
+def evaluatePerformance(epoch, g_model, d_model, dataset, latent_dim, n_samples=128):
     # Get real samples
     X_real, y_real = generateRealSamples(dataset, n_samples)
     # Evaluate discriminator on real samples
